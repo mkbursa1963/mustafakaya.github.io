@@ -1,0 +1,109 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import { portfolio } from '../data/portfolio';
+
+const title = 'Mustafa Kaya | Backend Geliştirme ve Uygulama Güvenliği';
+const description = 'Dumlupınar Üniversitesi Bilgisayar Mühendisliği son sınıf öğrencisi Mustafa Kaya’nın backend geliştirme ve uygulama güvenliği projeleri.';
+const base = import.meta.env.BASE_URL;
+const canonical = new URL(base, Astro.site ?? Astro.url);
+const { github, linkedin, email, cv } = portfolio.contact;
+const cvUrl = /^(https?:\/\/)/i.test(cv.trim()) ? cv.trim() : `${base}${cv.trim().replace(/^\/+/, '')}`;
+const contacts = [
+  { label: 'GitHub', href: github.trim() },
+  { label: 'LinkedIn', href: linkedin.trim() },
+  { label: 'E-posta', href: email.trim() && `mailto:${email.trim()}` },
+  { label: 'CV', href: cv.trim() && cvUrl },
+].filter(({ href }) => href);
+const steps = ['İstek', 'Kimlik doğrulama', 'Yetki kontrolü', 'API'];
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#171918" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:url" content={canonical.href} />
+  </head>
+  <body>
+    <a class="skip" href="#icerik">İçeriğe geç</a>
+    <header class="masthead wrap" id="baslangic">
+      <a class="wordmark" href="#baslangic"><span aria-hidden="true" class="mark"></span>Mustafa Kaya</a>
+      <nav aria-label="Ana menü">
+        <a href="#projeler">Projeler</a>
+        <a href="#hakkimda">Hakkımda</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
+    </header>
+    <main id="icerik" class="wrap" tabindex="-1">
+      <section class="hero" aria-labelledby="isim">
+        <div>
+          <h1 id="isim">Mustafa Kaya</h1>
+          <p class="role">Backend geliştirme ve uygulama güvenliği</p>
+          <p class="intro">Dumlupınar Üniversitesi Bilgisayar Mühendisliği son sınıf öğrencisiyim. API geliştirme, kimlik doğrulama ve güvenlik odaklı yazılım araçları üzerine projeler geliştiriyorum.</p>
+          <div class="actions">
+            <a class="button primary" href="#projeler">Projeleri İncele <span aria-hidden="true">↓</span></a>
+            {github.trim() && <a class="button" href={github.trim()}>GitHub <span aria-hidden="true">↗</span></a>}
+          </div>
+        </div>
+        <figure class="flow">
+          <figcaption><span aria-hidden="true" class="mark"></span>API erişim akışı</figcaption>
+          <ol>
+            {steps.map((step) => <li>{step}</li>)}
+          </ol>
+        </figure>
+      </section>
+      <section class="section" id="projeler" aria-labelledby="projeler-baslik">
+        <h2 id="projeler-baslik">Projeler</h2>
+        <div class="projects">
+          {portfolio.projects.map((project) => (
+            <article class="project">
+              <p class="field">{project.field}</p>
+              <h3>{project.name}</h3>
+              <p>{project.problem}</p>
+              <p>{project.contribution}</p>
+              <ul class="tech" aria-label="Teknolojiler">
+                {project.technologies.map((technology) => <li>{technology}</li>)}
+              </ul>
+              {project.repository && <a class="text-link" href={project.repository}>{project.name} deposu <span aria-hidden="true">↗</span></a>}
+            </article>
+          ))}
+        </div>
+      </section>
+      <section class="section about" id="hakkimda" aria-labelledby="hakkimda-baslik">
+        <div>
+          <h2 id="hakkimda-baslik">Hakkımda</h2>
+          <p>Dumlupınar Üniversitesi’nde Bilgisayar Mühendisliği 4. sınıf öğrencisiyim. Backend projelerimde bir isteğin API’ye nasıl ulaştığına, kullanıcı kimliğinin nasıl doğrulandığına ve erişim kararlarının nasıl uygulandığına odaklanıyorum. Python ile yerel dosya ve kod analizi üzerine de çalışıyorum.</p>
+        </div>
+        <div class="skills">
+          {portfolio.skills.map(({ category, technologies }) => (
+            <div>
+              <h3>{category}</h3>
+              <ul class="tech">
+                {technologies.map((technology) => <li>{technology}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section class="section contact" id="iletisim" aria-labelledby="iletisim-baslik">
+        <h2 id="iletisim-baslik">İletişim</h2>
+        {contacts.length > 0 && <ul class="actions">
+          {contacts.map(({ label, href }) => <li><a class="button" href={href}>{label} <span aria-hidden="true">↗</span></a></li>)}
+        </ul>}
+      </section>
+    </main>
+    <footer class="wrap footer">
+      <span>Mustafa Kaya</span>
+      <a href="#baslangic">Başa dön <span aria-hidden="true">↑</span></a>
+    </footer>
+  </body>
+</html>
